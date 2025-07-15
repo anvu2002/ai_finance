@@ -2,7 +2,10 @@ version: '3.9'
 
 services:
   postgres:
+    container_name: ai_finance_postgres
+    hostname: ai_finance_postgres
     image: postgres:14-alpine
+    restart: unless-stopped
     ports:
       - 5432:5432
     volumes:
@@ -11,6 +14,8 @@ services:
       - POSTGRES_PASSWORD=user
       - POSTGRES_USER=alex
       - POSTGRES_DB=ai_finance
+    networks:
+      - ai_finance
 
 volumes:
   postgres-data:
@@ -18,3 +23,7 @@ volumes:
       com.docker.compose.project: ai_finance
       com.docker.compose.service: postgres
       purpose: database
+
+networks:
+  ai_finance:
+    driver: bridge
