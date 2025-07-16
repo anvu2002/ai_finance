@@ -18,7 +18,7 @@ def main():
         
         # Get response from the agent
         response = agent.generate_response(user_input, session_id)
-        print(f"🌚 Agent: {response}")
+        print(f"🌚 Agent: {response}\n")
     
     # Clean up
     agent.close()

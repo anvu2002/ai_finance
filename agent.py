@@ -1,5 +1,5 @@
-import os
-import openai
+import sys
+from openai import OpenAI
 import psycopg2
 from typing import List, Dict, Optional
 from loguru import logger
@@ -9,7 +9,8 @@ class AIAgent:
     def __init__(self,
                  db_name: str = 'ai_finance'):
         # Init OpenAI API and PostgreSQL
-        openai.api_key = OPENAI_API_KEY
+        self.openai_client = OpenAI(api_key=OPENAI_API_KEY)
+        # openai.api_key = OPENAI_API_KEY
         self.db_connection = psycopg2.connect(f"{DATABASE_URL}/{db_name}")
         with self.db_connection.cursor() as cursor:
             cursor.execute("SELECT 1;")
@@ -80,12 +81,12 @@ class AIAgent:
         messages.append({"role": "user", "content": user_input})
         
         try:
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",  # or "gpt-4" if available
+            response = self.openai_client.chat.completions.create(
+                model="gpt-4o",
                 messages=messages,
                 temperature=0.7,
                 max_tokens=500
-            )
+            )            
             
             agent_response = response.choices[0].message.content
             
@@ -94,7 +95,8 @@ class AIAgent:
             
             return agent_response
         except Exception as e:
-            return f"An error occurred: {str(e)}"
+            logger.error(f"An error occurred: {str(e)}")
+            sys.exit(1)
     
     def store_conversation(self, session_id: str, user_message: str, agent_response: str):
         """Store a conversation in the database"""
