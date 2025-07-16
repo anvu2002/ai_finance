@@ -82,9 +82,10 @@ class AIAgent:
         messages = [{"role": "system", "content": self.system_prompt}]
         messages.extend(history)
         messages.append({"role": "user", "content": user_input})
-        print(f"-"*35)
-        print(f"messages={messages}")
-        print(f"-"*35)
+        # print(f"-"*35)
+        # print(f"messages={messages}")
+        # print(f"-"*35)
+        
         try:
             response = self.openai_client.chat.completions.create(
                 model=OPENAI_MODEL,
