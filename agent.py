@@ -52,7 +52,9 @@ class AIAgent:
             """)
             self.db_connection.commit()
     
-    def get_conversation_history(self, session_id: str, limit: int = 5) -> List[Dict]:
+    def get_conversation_history(self, 
+                                 session_id: str, 
+                                 past_msg_limit: int = 5) -> List[Dict]:
         """Retrieve conversation history for context"""
         with self.db_connection.cursor() as cursor:
             cursor.execute("""
@@ -61,7 +63,7 @@ class AIAgent:
                 WHERE session_id = %s 
                 ORDER BY created_at DESC 
                 LIMIT %s
-            """, (session_id, limit))
+            """, (session_id, past_msg_limit))
             rows = cursor.fetchall()
             history = []
             for user_msg, agent_resp in reversed(rows):
