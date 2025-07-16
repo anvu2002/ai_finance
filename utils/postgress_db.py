@@ -56,6 +56,30 @@ class PostgresDB():
         with PostgresDB.get_db_session(session=self.db_session) as session:
             sql = text("SELECT 1;")
             session.execute(sql)
+    
+    def create_tables(self):
+        """Ensure required tables exist"""
+        with PostgresDB.get_db_session(session=self.db_session) as session:
+            session.execute("""
+                CREATE TABLE IF NOT EXISTS conversations (
+                    id SERIAL PRIMARY KEY,
+                    session_id VARCHAR(255) NOT NULL,
+                    user_message TEXT,
+                    agent_response TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    metadata JSONB
+                )
+            """)
+            session.execute("""
+                CREATE TABLE IF NOT EXISTS agent_knowledge (
+                    id SERIAL PRIMARY KEY,
+                    key VARCHAR(255) NOT NULL,
+                    value TEXT,
+                    embedding VECTOR(1536),
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            """)
 
 db1=PostgresDB()
 breakpoint()
