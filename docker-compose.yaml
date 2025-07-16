@@ -4,7 +4,10 @@ services:
   postgres:
     container_name: ai_finance_postgres
     hostname: ai_finance_postgres
-    image: postgres:14-alpine
+    # image: postgres:14-alpine
+    build: 
+      context: .
+      dockerfile: docker/postgres/Dockerfile
     restart: unless-stopped
     ports:
       - 5432:5432
