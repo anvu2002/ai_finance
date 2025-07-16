@@ -23,6 +23,11 @@ class PostgresDB():
         # Get a session from the current DB_ENGINE pool
         Session = sessionmaker(bind=self.DB_ENGINE)
         self.db_session = Session()
+        try:
+            self.validate_db_conn()
+            print(f"[+] DB CONNECTED: {self.db_name}")
+        except Exception as e:
+            logger.error(f"FAILED TO connect to DB {self.db_name}")
 
     @classmethod
     def init_db_engine(cls, db_name):
@@ -33,8 +38,6 @@ class PostgresDB():
             if cls.DB_ENGINE is None:
                 print(f"[+] Init DB ENGINE")
                 cls.DB_ENGINE = create_engine(f"{DATABASE_URL}/{db_name}")
-            else:
-                print(f"[+] DB ENGINE aready init")
         except Exception as e:
             logger.error(f"FAILED to init DB Engine. Error: {e}")
             sys.exit(1)
@@ -53,3 +56,6 @@ class PostgresDB():
         with PostgresDB.get_db_session(session=self.db_session) as session:
             sql = text("SELECT 1;")
             session.execute(sql)
+
+db1=PostgresDB()
+breakpoint()
