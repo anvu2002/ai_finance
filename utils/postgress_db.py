@@ -1,7 +1,3 @@
-# 1. DB_ENGINE
-# 2. create_session factory
-# 3. context management for gracefully retrieve a db conn from the pool
-# , use it, the auto commit or rollback at the end
 import sys
 from contextlib import contextmanager
 from loguru import logger
