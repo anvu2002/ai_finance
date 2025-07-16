@@ -167,5 +167,9 @@ class AIAgent:
             return None
     
     def close(self):
-        """Clean up resources"""
+        """
+        Clean up resources:
+        1. Historic messages of the current session.
+
+        """
         self.db_connection.close()
