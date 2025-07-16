@@ -2,17 +2,23 @@ import os
 import openai
 import psycopg2
 from typing import List, Dict, Optional
+from loguru import logger
+from configs.config import OPENAI_API_KEY, DATABASE_URL
 
 class AIAgent:
-    def __init__(self):
-        # Initialize OpenAI API
+    def __init__(self,
+                 db_name: str = 'ai_finance'):
+        # Init OpenAI API and PostgreSQL
+        openai.api_key = OPENAI_API_KEY
+        self.db_connection = psycopg2.connect(f"{DATABASE_URL}/{db_name}")
+        with self.db_connection.cursor() as cursor:
+            cursor.execute("SELECT 1;")
+            print(f"[+] DB CONNECTED: {self.db_connection.info.dbname}@{self.db_connection.info.host}")
+
+
+        # self.create_tables()
+        
         breakpoint()
-        openai.api_key = os.getenv("OPENAI_API_KEY")
-        
-        # Database connection
-        self.db_connection = psycopg2.connect(os.getenv("DATABASE_URL"))
-        self.create_tables()
-        
         # Agent configuration
         self.system_prompt = """
         You are a helpful AI assistant. Your responses should be concise, 
