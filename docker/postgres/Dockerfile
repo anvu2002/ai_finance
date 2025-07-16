@@ -5,7 +5,7 @@ RUN apk update && \
     apk add --no-cache postgresql-dev gcc g++ make git && \
     git clone https://github.com/pgvector/pgvector.git && \
     cd pgvector && \
-    make && \
+    make CC=gcc && \
     make install && \
     cd .. && \
     rm -rf pgvector
