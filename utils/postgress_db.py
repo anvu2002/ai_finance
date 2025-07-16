@@ -48,6 +48,7 @@ class PostgresDB():
             yield session
             session.commit()
         except Exception as e:
+            logger.error(f"FAILED TO run query. Error: {e}")
             session.rollback()
         finally:
             session.close()
@@ -60,7 +61,8 @@ class PostgresDB():
     def create_tables(self):
         """Ensure required tables exist"""
         with PostgresDB.get_db_session(session=self.db_session) as session:
-            session.execute("""
+            conversation_table = text(
+                """
                 CREATE TABLE IF NOT EXISTS conversations (
                     id SERIAL PRIMARY KEY,
                     session_id VARCHAR(255) NOT NULL,
@@ -69,17 +71,26 @@ class PostgresDB():
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     metadata JSONB
                 )
-            """)
-            session.execute("""
-                CREATE TABLE IF NOT EXISTS agent_knowledge (
-                    id SERIAL PRIMARY KEY,
-                    key VARCHAR(255) NOT NULL,
-                    value TEXT,
-                    embedding VECTOR(1536),
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            """)
+                """
+            )
+            
+            session.execute(conversation_table)
+            
+            agent_knowledge_table = text(
+                """ 
+                    CREATE TABLE IF NOT EXISTS agent_knowledge (
+                        id SERIAL PRIMARY KEY,
+                        key VARCHAR(255) NOT NULL,
+                        value TEXT,
+                        embedding VECTOR(1536),
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                """
+            )
+            
+            session.execute(agent_knowledge_table)
 
 db1=PostgresDB()
+db1.create_tables()
 breakpoint()
