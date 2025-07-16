@@ -67,7 +67,9 @@ class AIAgent:
                 history.append({"role": "assistant", "content": agent_resp})
             return history
     
-    def generate_response(self, user_input: str, session_id: str) -> str:
+    def generate_response(self, 
+                          user_input: str, 
+                          session_id: str) -> str:
         """Generate a response using OpenAI's API with conversation context"""
         # Get conversation history for context
         history = self.get_conversation_history(session_id)
