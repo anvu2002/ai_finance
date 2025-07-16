@@ -3,7 +3,7 @@ from openai import OpenAI
 import psycopg2
 from typing import List, Dict, Optional
 from loguru import logger
-from configs.config import OPENAI_API_KEY, DATABASE_URL
+from configs.config import OPENAI_API_KEY, OPENAI_MODEL, DATABASE_URL
 
 class AIAgent:
     def __init__(self,
@@ -24,6 +24,8 @@ class AIAgent:
         accurate, and helpful. If you don't know something, say so rather 
         than making up information.
         """
+
+        print(f"[+] Model: {OPENAI_MODEL}")
     
     def create_tables(self):
         """Ensure required tables exist"""
@@ -81,7 +83,7 @@ class AIAgent:
         
         try:
             response = self.openai_client.chat.completions.create(
-                model="gpt-4o-mini",
+                model=OPENAI_MODEL,
                 store=True,
                 messages=messages,
                 temperature=0.7,
@@ -162,5 +164,3 @@ class AIAgent:
     def close(self):
         """Clean up resources"""
         self.db_connection.close()
-
-agent = AIAgent()

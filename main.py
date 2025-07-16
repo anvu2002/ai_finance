@@ -7,8 +7,10 @@ def main():
     
     # Create a session ID (in a real app, this would persist between requests)
     session_id = str(uuid.uuid4())
-    
     print("[+] AI Agent initialized. Type 'quit' to exit.")
+    print(f"======================================")
+    print(f"--------------- Enjoy ----------------")
+    print(f"======================================\n")
     
     while True:
         user_input = input("👨 You: ")
