@@ -6,7 +6,7 @@ import sys
 from contextlib import contextmanager
 from loguru import logger
 from configs.config import DATABASE_URL
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
 class PostgresDB():
@@ -43,9 +43,13 @@ class PostgresDB():
     def get_db_session(session):
         try:
             yield session
-            session.execute()
             session.commit()
         except Exception as e:
             session.rollback()
         finally:
             session.close()
+    
+    def validate_db_conn(self):
+        with PostgresDB.get_db_session(session=self.db_session) as session:
+            sql = text("SELECT 1;")
+            session.execute(sql)
