@@ -39,3 +39,13 @@ class PostgresDB():
             logger.error(f"FAILED to init DB Engine. Error: {e}")
             sys.exit(1)
         
+    @contextmanager
+    def get_db_session(session):
+        try:
+            yield session
+            session.execute()
+            session.commit()
+        except Exception as e:
+            session.rollback()
+        finally:
+            session.close()
