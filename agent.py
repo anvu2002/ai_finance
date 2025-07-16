@@ -10,7 +10,6 @@ class AIAgent:
                  db_name: str = 'ai_finance'):
         # Init OpenAI API and PostgreSQL
         self.openai_client = OpenAI(api_key=OPENAI_API_KEY)
-        # openai.api_key = OPENAI_API_KEY
         self.db_connection = psycopg2.connect(f"{DATABASE_URL}/{db_name}")
         with self.db_connection.cursor() as cursor:
             cursor.execute("SELECT 1;")
