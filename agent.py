@@ -16,9 +16,8 @@ class AIAgent:
             print(f"[+] DB CONNECTED: {self.db_connection.info.dbname}@{self.db_connection.info.host}")
 
 
-        # self.create_tables()
+        self.create_tables()
         
-        breakpoint()
         # Agent configuration
         self.system_prompt = """
         You are a helpful AI assistant. Your responses should be concise, 
